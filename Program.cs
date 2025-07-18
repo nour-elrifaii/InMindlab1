@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using WebApplication1.Middleware;
 using WebApplication1.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,6 +31,7 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
+app.UseMiddleware<RequestLoggingMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
@@ -42,8 +44,8 @@ app.UseStaticFiles();
 app.MapControllers();
 app.UseCors();
 
-app.Urls.Add("http://localhost:5263");  
-//app.Urls.Add("https://localhost:7030"); 
+//app.Urls.Add("http://localhost:5263");  
+
 
 app.Run();
 

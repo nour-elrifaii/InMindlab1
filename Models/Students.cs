@@ -2,7 +2,7 @@
 
 public class Student
 {
-    public required long Id {get;set;}
+    public required long StudentId {get;set;}
     public required string Name {get;set;}
     public required string Email {get;set;}
 }

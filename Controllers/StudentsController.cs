@@ -11,8 +11,8 @@ public class StudentsController : ControllerBase
 {
     private static List<Student> students = new()
     {
-        new Student { Id = 1, Name = "Tarek", Email = "tarek@gmail.com" },
-        new Student { Id = 2, Name = "Reine", Email = "reine@gmail.com" }
+        new Student { StudentId = 1, Name = "Tarek", Email = "tarek@gmail.com" },
+        new Student { StudentId = 2, Name = "Reine", Email = "reine@gmail.com" }
     };
 
     [HttpGet]
@@ -21,21 +21,23 @@ public class StudentsController : ControllerBase
         return Ok(students);
     }
 
-    [HttpGet("id:{id}")]
+    [HttpGet("student/{id}")]
     public IActionResult GetStudentById([FromRoute] long id)
     {
-        var student = students.FirstOrDefault(s => s.Id == id);
+        var student = students.FirstOrDefault(s => s.StudentId == id);
         if (student == null)
             return NotFound();
-
         return Ok(student);
     }
 
     [HttpGet("search")]
     public IActionResult GetStudentByName([FromQuery] string name)
     {
-        name = name.ToLower();
-        var student = students.FirstOrDefault(s => s.Name.ToLower().Contains(name));
+        if (string.IsNullOrEmpty(name))
+        {
+            return NotFound();
+        }
+        var student = students.FirstOrDefault(x => x.Name.ToLower() == name.ToLower());
         return Ok(student);
     }
     
@@ -47,7 +49,6 @@ public class StudentsController : ControllerBase
         {
             return NotFound("Invalid language");
         }
-
         try
         {
             var culture = CultureInfo.GetCultureInfo(language);
@@ -60,21 +61,21 @@ public class StudentsController : ControllerBase
         }
     }
     
-    [HttpPost("name")]
-    public IActionResult PostName([FromBody] NewStudent stud)
+    [HttpPost("student")]
+    public IActionResult NewName([FromBody] Student newstudent)
     {
-        var student = students.FirstOrDefault(s => s.Id == stud.Id);
-        if (student == null)
-            return NotFound();
-        
-        student.Name = stud.Name;
-        student.Email = stud.Email;
+        if (newstudent == null)
+        {
+            return BadRequest();
+        }
+        var student = students.FirstOrDefault(x => x.StudentId == newstudent.StudentId);
+        student.Name = newstudent.Name;
+        student.Email = newstudent.Email;
         return Ok(student);
     }
     
     public class FileUploadDto
     {
-        [FromForm(Name = "file")]
         public IFormFile File { get; set; }
     }
 
@@ -87,11 +88,16 @@ public class StudentsController : ControllerBase
             return BadRequest("No file uploaded.");
 
         var path = Path.Combine("wwwroot/uploads", file.FileName);
-        Directory.CreateDirectory(Path.GetDirectoryName(path));
-
-        using var stream = new FileStream(path, FileMode.Create);
-        await file.CopyToAsync(stream);
-
+        try
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            using var stream = new FileStream(path, FileMode.Create);
+            await file.CopyToAsync(stream);
+        }
+        catch(IOException e)
+        {
+            return StatusCode(500, "There was an error uploading the file.");
+        }
         return Ok(new { path });
     }
 
@@ -99,7 +105,7 @@ public class StudentsController : ControllerBase
     [HttpDelete("delete/{id}")]
     public IActionResult DeleteStudent([FromRoute] long id)
     {
-        var student = students.FirstOrDefault(s => s.Id == id);
+        var student = students.FirstOrDefault(s => s.StudentId == id);
         if (student == null)
             return NotFound();
         students.Remove(student);
@@ -107,12 +113,5 @@ public class StudentsController : ControllerBase
     }
     
 
-}
-
-public class NewStudent
-{
-    public long Id { get; set; }
-    public required string Name { get; set; }
-    public required string Email { get; set; }
 }
 
