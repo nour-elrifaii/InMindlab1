@@ -68,3 +68,6 @@ C:\Users\User\Documents\Lab1\InMindlab1\obj\Debug\net8.0\refint\WebApplication1.
 C:\Users\User\Documents\Lab1\InMindlab1\obj\Debug\net8.0\WebApplication1.pdb
 C:\Users\User\Documents\Lab1\InMindlab1\obj\Debug\net8.0\WebApplication1.genruntimeconfig.cache
 C:\Users\User\Documents\Lab1\InMindlab1\obj\Debug\net8.0\ref\WebApplication1.dll
+C:\Users\User\Documents\Lab1\InMindlab1\bin\Debug\net8.0\FluentValidation.dll
+C:\Users\User\Documents\Lab1\InMindlab1\bin\Debug\net8.0\FluentValidation.AspNetCore.dll
+C:\Users\User\Documents\Lab1\InMindlab1\bin\Debug\net8.0\FluentValidation.DependencyInjectionExtensions.dll

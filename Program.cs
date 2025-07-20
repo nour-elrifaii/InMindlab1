@@ -1,8 +1,14 @@
 using System.ComponentModel.DataAnnotations;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using WebApplication1.Middleware;
+using WebApplication1.Models;
 using WebApplication1.Services;
+using WebApplication1.Validators;
+using WebApplication2.Filters;
+using WebApplication2.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,17 +23,18 @@ builder.Services.AddCors(options =>
 });
 
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ValidationFilter>();
+}).AddFluentValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<StudentValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<DateValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+builder.Services.AddScoped<ValidationFilter>();
+builder.Services.AddTransient<ObjectMapperService>();
 //builder.Services.AddScoped<StudentService>();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.MapType<IFormFile>(() => new Microsoft.OpenApi.Models.OpenApiSchema
-    {
-        Type = "string",
-        Format = "binary"
-    });
-});
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 

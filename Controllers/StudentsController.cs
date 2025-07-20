@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices.JavaScript;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
+using WebApplication1.Services;
 
 namespace WebApplication1.Controllers;
 
@@ -9,11 +10,17 @@ namespace WebApplication1.Controllers;
 [Route("[controller]")]
 public class StudentsController : ControllerBase
 {
+    private readonly ObjectMapperService _objectMapperService;
+    public StudentsController(ObjectMapperService mapperService)
+    {
+        _objectMapperService = mapperService;
+    }
     private static List<Student> students = new()
     {
-        new Student { StudentId = 1, Name = "Tarek", Email = "tarek@gmail.com" },
-        new Student { StudentId = 2, Name = "Reine", Email = "reine@gmail.com" }
+        new Student { Id = 1, Name = "Tarek", Email = "tarek@gmail.com" },
+        new Student { Id = 2, Name = "Reine", Email = "reine@gmail.com" }
     };
+    
 
     [HttpGet]
     public IActionResult GetAllStudents()
@@ -24,42 +31,25 @@ public class StudentsController : ControllerBase
     [HttpGet("student/{id}")]
     public IActionResult GetStudentById([FromRoute] long id)
     {
-        var student = students.FirstOrDefault(s => s.StudentId == id);
-        if (student == null)
-            return NotFound();
+        var student = students.FirstOrDefault(s => s.Id == id);
         return Ok(student);
     }
 
     [HttpGet("search")]
     public IActionResult GetStudentByName([FromQuery] string name)
     {
-        if (string.IsNullOrEmpty(name))
-        {
-            return NotFound();
-        }
         var student = students.FirstOrDefault(x => x.Name.ToLower() == name.ToLower());
         return Ok(student);
     }
-    
+
     [HttpGet("date")]
-    public IActionResult GetDate([FromHeader(Name= "Accept-Language")] string language)
+    public IActionResult GetDate([FromHeader(Name = "Accept-Language")] string language)
     {
-        var availableCultures = new[] { "en-US", "es-ES", "fr-FR" };
-        if (!availableCultures.Contains(language))
-        {
-            return NotFound("Invalid language");
-        }
-        try
-        {
-            var culture = CultureInfo.GetCultureInfo(language);
-            var newDate = DateTime.Now.ToString("D", culture);
-            return Ok(newDate);
-        }
-        catch (CultureNotFoundException)
-        {
-            return NotFound("Invalid language");
-        }
+        var culture = CultureInfo.GetCultureInfo(language);
+        var newDate = DateTime.Now.ToString("D", culture);
+        return Ok(newDate);
     }
+
     
     [HttpPost("student")]
     public IActionResult NewName([FromBody] Student newstudent)
@@ -68,7 +58,7 @@ public class StudentsController : ControllerBase
         {
             return BadRequest();
         }
-        var student = students.FirstOrDefault(x => x.StudentId == newstudent.StudentId);
+        var student = students.FirstOrDefault(x => x.Id == newstudent.Id);
         student.Name = newstudent.Name;
         student.Email = newstudent.Email;
         return Ok(student);
@@ -105,11 +95,19 @@ public class StudentsController : ControllerBase
     [HttpDelete("delete/{id}")]
     public IActionResult DeleteStudent([FromRoute] long id)
     {
-        var student = students.FirstOrDefault(s => s.StudentId == id);
-        if (student == null)
-            return NotFound();
+        var student = students.FirstOrDefault(s => s.Id == id);
         students.Remove(student);
         return Ok($"student {id} has been deleted");
+    }
+
+    [HttpPost("mapStudentToPerson")]
+    public IActionResult MapStudentToPerson([FromBody] Student student)
+    {
+        if (student == null)
+            return BadRequest("Student is null");
+
+        Person person = _objectMapperService.Map<Student, Person>(student);
+        return Ok(person);
     }
     
 

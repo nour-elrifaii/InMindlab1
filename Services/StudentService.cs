@@ -6,8 +6,8 @@ namespace WebApplication1.Services
     {
         private static List<Student> students = new()
         {
-            new Student { StudentId = 1, Name = "Tarek", Email = "tarek@gmail.com" },
-            new Student { StudentId = 2, Name = "Reine", Email = "reine@gmail.com" }
+            new Student { Id = 1, Name = "Tarek", Email = "tarek@gmail.com" },
+            new Student { Id = 2, Name = "Reine", Email = "reine@gmail.com" }
         };
 
         public List<Student> GetAllStudents()
@@ -17,7 +17,7 @@ namespace WebApplication1.Services
 
         public Student? GetStudentById(long id)
         {
-            return students.FirstOrDefault(s => s.StudentId == id);
+            return students.FirstOrDefault(s => s.Id == id);
         }
 
         public Student? GetStudentByName(string name)
@@ -40,7 +40,7 @@ namespace WebApplication1.Services
 
         public Student? UpdateStudent(long id, string name, string email)
         {
-            var student = students.FirstOrDefault(s => s.StudentId == id);
+            var student = students.FirstOrDefault(s => s.Id == id);
             if (student == null) return null;
 
             student.Name = name;
@@ -50,7 +50,7 @@ namespace WebApplication1.Services
 
         public bool DeleteStudent(long id)
         {
-            var student = students.FirstOrDefault(s => s.StudentId == id);
+            var student = students.FirstOrDefault(s => s.Id == id);
             if (student == null) return false;
 
             students.Remove(student);

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "B2AbiHfbnoYs0ukiYFB2Pnyrp+vRk+0PPTfhBOjTCX8=",
+  "Hash": "SEwjIMPOF1Ryo84tn6FCIR4ug/vyn1ZOsGTkLSyHftQ=",
   "Source": "WebApplication1",
   "BasePath": "_content/WebApplication1",
   "Mode": "Default",
@@ -34,6 +34,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\uploads\\cat.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\User\\Documents\\Lab1\\InMindlab1\\wwwroot\\uploads\\mabell.jpg",
+      "SourceId": "WebApplication1",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\User\\Documents\\Lab1\\InMindlab1\\wwwroot\\",
+      "BasePath": "_content/WebApplication1",
+      "RelativePath": "uploads/mabell.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\mabell.jpg"
     }
   ]
 }
