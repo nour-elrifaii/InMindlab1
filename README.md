@@ -14,4 +14,4 @@ The validator makes sure that the incoming data is valid before it is being proc
 This filter finds and runs the registered IValidor. If it contains errors, it returns a message with the error details.
 
 ## Reflection & Generic Type
-The Person class was created to create a generic mapper with the student class. ObjectMapperService in Services contains a simple mapper. It uses reflection to create a new instance of a target type and copy over values for properties that share the same names. This is tested in the "mapStudenttoPerson" endpoint, where the request takes a stduent and send sback a person.
+The Person class was created to create a generic mapper with the student class. ObjectMapperService in Services contains a simple mapper. It uses reflection to create a new instance of a target type and copy over values for properties that share the same names. This is tested in the "mapStudentToPerson" endpoint, where the request takes a stduent and send sback a person.
